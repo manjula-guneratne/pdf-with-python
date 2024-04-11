@@ -22,7 +22,7 @@ class PDF(FPDF):
         self.cell(title_w, 10, title, border=1, ln=1, align='C', fill=1)
 
         #line break
-        self.ln(50)
+        self.ln(20)
 
     def footer(self):
         #Set position of the footer
@@ -33,6 +33,18 @@ class PDF(FPDF):
         self.set_text_color(169, 169, 169)
         #Page number
         self.cell(0,10,f'Page {self.page_no()}/{{nb}}', align='C')
+
+    #Adding chapter title to start of each chapter
+    def chapter_title(self, ch_num, ch_title):
+        #set font
+        self.set_font('helvetica', '', 12)
+        #background colour
+        self.set_fill_color(200, 220, 255)
+        #chapter title
+        chapter_title = f'Chapter {ch_num} : {ch_title}'
+        self.cell(0, 5, chapter_title, ln=1, fill=1)
+        #line break
+        self.ln()
 
     # Chapter content
     def chapter_body(self, name):
@@ -45,7 +57,15 @@ class PDF(FPDF):
         self.multi_cell(0,5,txt)
         #line break
         self.ln()
+        #end of each chapter
+        self.set_font('times', 'I', 12)
+        self.cell(0, 5, 'END OF CHAPTER')
 
+    def print_chapter(self, ch_num, ch_title, name):
+        self.add_page()
+        self.chapter_title(ch_num, ch_title)
+        self.chapter_body(name)
+        
     
 
 pdf = PDF('P','mm', 'Letter')
@@ -56,11 +76,7 @@ pdf.alias_nb_pages()
 pdf.set_auto_page_break(auto=True, margin=15)
 pdf.add_page()
 
-pdf.set_font('helvetica','BIU', size=16)
-
-for i in range(1,41):
-    pdf.cell(0, 10, f'This is line {i} :D', ln=1)
-
-pdf.cell(80,10, "Good bye World!")
+pdf.print_chapter(1, 'A RUNAWAY REEF', 'chp1.txt')
+pdf.print_chapter(2, 'THE PROS AND CONS', 'chp2.txt')
 
 pdf.output("Leagues.pdf")
