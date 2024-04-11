@@ -35,7 +35,9 @@ class PDF(FPDF):
         self.cell(0,10,f'Page {self.page_no()}/{{nb}}', align='C')
 
     #Adding chapter title to start of each chapter
-    def chapter_title(self, ch_num, ch_title):
+    def chapter_title(self, ch_num, ch_title, link):
+        #Set link location
+        self.set_link(link)
         #set font
         self.set_font('helvetica', '', 12)
         #background colour
@@ -61,9 +63,9 @@ class PDF(FPDF):
         self.set_font('times', 'I', 12)
         self.cell(0, 5, 'END OF CHAPTER')
 
-    def print_chapter(self, ch_num, ch_title, name):
+    def print_chapter(self, ch_num, ch_title, name, link):
         self.add_page()
-        self.chapter_title(ch_num, ch_title)
+        self.chapter_title(ch_num, ch_title, link)
         self.chapter_body(name)
         
     
@@ -94,7 +96,7 @@ pdf.cell(0, 10, 'Text Source', ln=1, link=website)
 pdf.cell(0,10, 'Chapter 1', ln=1, link=ch1_link)
 pdf.cell(0,10, 'Chapter 2', ln=1, link=ch2_link)
 
-pdf.print_chapter(1, 'A RUNAWAY REEF', 'chp1.txt')
-pdf.print_chapter(2, 'THE PROS AND CONS', 'chp2.txt')
+pdf.print_chapter(1, 'A RUNAWAY REEF', 'chp1.txt', ch1_link)
+pdf.print_chapter(2, 'THE PROS AND CONS', 'chp2.txt', ch2_link)
 
 pdf.output("Leagues.pdf")
