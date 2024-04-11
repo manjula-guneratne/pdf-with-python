@@ -70,11 +70,29 @@ class PDF(FPDF):
 
 pdf = PDF('P','mm', 'Letter')
 
+#metadata
+pdf.set_title(title)
+pdf.set_author('Manjula Guneratne')
+
+#Create links
+website = 'http://www.gutenberg.org/cache/epub/164/pg164.txt'
+ch1_link = pdf.add_link()
+ch2_link = pdf.add_link()
+
 #Get total page numbers
 pdf.alias_nb_pages()
 
+#Set auto page break
 pdf.set_auto_page_break(auto=True, margin=15)
+
+#Add page
 pdf.add_page()
+pdf.image('background_image.png', x= -0.5, w=pdf.w + 1)
+
+#Attach links
+pdf.cell(0, 10, 'Text Source', ln=1, link=website)
+pdf.cell(0,10, 'Chapter 1', ln=1, link=ch1_link)
+pdf.cell(0,10, 'Chapter 2', ln=1, link=ch2_link)
 
 pdf.print_chapter(1, 'A RUNAWAY REEF', 'chp1.txt')
 pdf.print_chapter(2, 'THE PROS AND CONS', 'chp2.txt')
